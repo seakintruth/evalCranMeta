@@ -2,7 +2,7 @@
 % Please edit documentation in R/cran.meta.report.graph.R
 \name{cran.meta.dependancies.graph}
 \alias{cran.meta.dependancies.graph}
-\title{A wraper on miniCRAN's makeDepGraph to automate generating reports, and visualizations of these graphs}
+\title{Creates a .html package report for many packages at once.}
 \usage{
 cran.meta.dependancies.graph(cran.packs = as.list(installed.packages()[,
   1]), reports.directory = NULL)
@@ -17,7 +17,7 @@ If a single package is passed then a HTML report is generated and displayed in t
 an igraph of the dependancy graph for supplied package list.
 }
 \description{
-A wraper on miniCRAN's makeDepGraph to automate generating reports, and visualizations of these graphs
+Creates a .html package report for many packages at once.
 }
 \examples{
 #Graph installed package, except some package
