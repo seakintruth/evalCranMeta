@@ -15,14 +15,14 @@ If a single package is passed then a HTML report is generated and displayed in t
 }
 \value{
 an igraph of the dependancy graph for supplied package list.
+Graph installed package, except some package
+For report details See: https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-intro.html
 }
 \description{
 Creates a .html package report for many packages at once.
 }
 \examples{
-#Graph installed package, except some package
 packs <- installed.packages()[,1]
-packs.filtered <- setdiff(packs,packs['evalCranMeta'] )
+packs.filtered <- dplyr::setdiff(packs,packs['evalCranMeta'] )
 cran.meta.dependancies.graph(packs.filtered)
-# See: https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-intro.html
 }

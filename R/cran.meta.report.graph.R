@@ -8,12 +8,12 @@
 #' but it works, see:
 #' https://www.bsetmet.com/wp-content/bespoke/project_assets/practicum.jeremy.gerdes/all.dependancies.graph.png
 #' @return an igraph of the dependancy graph for supplied package list.
+#' Graph installed package, except some package
+#' For report details See: https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-intro.html
 #' @examples
-#' #Graph installed package, except some package
 #' packs <- installed.packages()[,1]
-#' packs.filtered <- setdiff(packs,packs['evalCranMeta'] )
+#' packs.filtered <- dplyr::setdiff(packs,packs['evalCranMeta'] )
 #' cran.meta.dependancies.graph(packs.filtered)
-#' # See: https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-intro.html
 #' @export 
 cran.meta.dependancies.graph <- function (
   cran.packs = as.list(installed.packages()[,1]),
