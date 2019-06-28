@@ -16,6 +16,7 @@ Imports:
   pkgnet,
   stringr,
   purrr,
+  magrittr,
   ctv
 Suggests:
     xlsx,
