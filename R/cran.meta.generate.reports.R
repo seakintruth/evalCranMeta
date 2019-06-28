@@ -1,9 +1,9 @@
 #' Generates various reports consering the CRAN meta data
 #' @param include.code.review boolean, include code review will install all packages to this machine this can take a long time of first run
 #' @return a data.frame containing CRAN metadata, and code review information
-#' @importFrom magrittr %>%
+#' @importFrom magrittr "%>%"
 #' @export
-cran.meta.generate.reports <- function(include.code.review = FALSE){
+cran.meta.generate.reports <- function(reports.directory, include.code.review = FALSE){
   if(include.code.review){
     cran.meta.install.all.packages()
   }  
@@ -16,15 +16,14 @@ cran.meta.generate.reports <- function(include.code.review = FALSE){
   # Fix broken column names (duplicates, and invalid strings)
   names(cranData) <- make.names(names(cranData), unique=TRUE)
   
-  
+  package.license.restricts.use <- dplyr::filter(cranData,cranData$License_restricts_use == "yes") 
   # ------------------------------------------------------------------------------
   # [TODO] start recursive function untill all reverse depends, and revers imports
   #  are found, from starting list
   # ------------------------------------------------------------------------------
   RDRI.cols <- c("Package","Reverse.depends","Reverse.imports")
-  
-  pack.restricts.use.RDRI <-  package.license.restricts.use %>% select(RDRI.cols)
-  pack.restricts.use.RDRI <- union(pack.restricts.use.RDRI[,1],pack.restricts.use.RDRI[,2])
+  pack.restricts.use.RDRI <- dplyr::select(package.license.restricts.use,RDRI.cols)
+  pack.restricts.use.RDRI <- dplyr::union(pack.restricts.use.RDRI[,'Reverse.depends'],pack.restricts.use.RDRI[,'Reverse.imports'])
   # remove NA
   pack.restricts.use.RDRI <- pack.restricts.use.RDRI[!is.na(pack.restricts.use.RDRI)]
   pack.restricts.use.RDRI <- unlist(strsplit(pack.restricts.use.RDRI, ","))
@@ -35,8 +34,8 @@ cran.meta.generate.reports <- function(include.code.review = FALSE){
   names(pack.restricts.use.RDRI) <- "Package"
   descriptive.cols = c("Package","License","Title",RDRI.cols)
   
-  pack.restricts.use.RDRI <- inner_join(pack.restricts.use.RDRI,select(cranData,descriptive.cols),by="Package")
-  
+  pack.restricts.use.RDRI <- dplyr::inner_join(pack.restricts.use.RDRI,dplyr::select(cranData,descriptive.cols),by="Package")
+  pack.restricts.use.RDRI <- dplyr::union(pack.restricts.use.RDRI,dplyr::select(package.license.restricts.use,descriptive.cols))
   # ------------------------------------------------------------------------------
   # End function, currently we get a final answer without going deeper than one iteration.
   # ------------------------------------------------------------------------------
@@ -44,16 +43,17 @@ cran.meta.generate.reports <- function(include.code.review = FALSE){
   # want to use as a general rule.
   # Here is a list of packages that the enterprise may not
   # want to use as a general rule.
+  # check if xlsx is installed prior to exporting report
   if(exists("xlsx::write.xlsx")){
     write.xlsx(
-      package.license.restricts.use,
-      file="package.license.restricts.use.xlsx",
+      pack.restricts.use.RDRI,
+      file=filepath(reports.directory,"package.license.restricts.use.xlsx"),
       sheetName="license_restricts_use",
       row.names=FALSE
     )  
   }else{
-    write.csv(package.license.restricts.use,
-      sheetName="license_restricts_use",
+    write.csv(pack.restricts.use.RDRI,
+      file=filepath(reports.directory,"package.license.restricts.use.csv"),
       row.names=FALSE
     )
   }

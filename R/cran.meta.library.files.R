@@ -16,13 +16,17 @@ logMessage <- function(strMessage, strLogFileName, fCreateNewFile = FALSE){
 };
 
 #' @export
-cran.meta.gather.file.data <- function(){
-  
-  
+cran.meta.gather.file.data <- function(reports.directory=Sys.getEnv("R_LIBS_USER")){
   #strBasePath <- (.choose_directory(caption="Select installed folder directory"))
   # [TODO] make this work for windows and linux
-  strBasePath <- Sys.getenv("R_LIBS_USER")
-  
+  if(stringr::str_length(reports.directory)==0){
+    reports.directory <- .choose_directory()
+  } else  {
+    if (!dir.exists(reports.directory)){
+      reports.directory <- .choose_directory()
+    } 
+  }
+  strBasePath <- reports.directory
   log.file <- "fileSearch.log"
   
   timer.start <-Sys.time();

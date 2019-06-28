@@ -4,7 +4,8 @@
 \alias{cran.meta.generate.reports}
 \title{Generates various reports consering the CRAN meta data}
 \usage{
-cran.meta.generate.reports(include.code.review = FALSE)
+cran.meta.generate.reports(reports.directory,
+  include.code.review = FALSE)
 }
 \arguments{
 \item{include.code.review}{boolean, include code review will install all packages to this machine this can take a long time of first run}
