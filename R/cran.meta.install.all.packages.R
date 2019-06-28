@@ -1,4 +1,6 @@
-#' Installs all available packages from CRAN
+#' Install all available packages (with source) from CRAN
+#' On first run this will take a long time (several hours), only installs packages not yet installed on your machine.
+#' The goal is to allow us to perform in depth code reveiw of all packages on the CRAN Repository.
 #' @note  
 #' As of 6/26/2019 installing all on Windows, is ~21GB, 1/2 million files, and 129k folders, but setting up a mirror of CRAN is ~210GB, this is because it holds packages for all versions
 #' @export

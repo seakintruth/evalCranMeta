@@ -1,6 +1,6 @@
 Package: evalCranMeta 
 Title: Evaluate CRAN Meta Data
-Version: 0.1.0.9008
+Version: 0.1.0.9009
 Authors@R: 
   person("Gerdes", "Jeremy", email ="seakintruth@gmail.com", 
   role = c("aut", "cre"))
@@ -13,7 +13,8 @@ Imports:
   miniCRAN (>= 0.2.11) ,
   svglite,
   ggplot2,
-  pkgnet
+  pkgnet,
+  ctv
 Suggests:
   knitr (>= 0.1.0)
 RoxygenNote: 6.1.1

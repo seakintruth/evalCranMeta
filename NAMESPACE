@@ -2,4 +2,5 @@
 
 export(cran.meta.dependancies.graph)
 export(cran.meta.gather.file.data)
+export(cran.meta.gather.task.views)
 export(cran.meta.install.all.packages)
