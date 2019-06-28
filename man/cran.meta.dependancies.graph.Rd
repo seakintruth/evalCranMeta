@@ -24,4 +24,5 @@ Creates a .html package report for many packages at once.
 packs <- installed.packages()[,1]
 packs.filtered <- setdiff(packs,packs['evalCranMeta'] )
 cran.meta.dependancies.graph(packs.filtered)
+# See: https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-intro.html
 }

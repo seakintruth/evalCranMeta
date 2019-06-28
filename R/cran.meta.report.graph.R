@@ -13,6 +13,7 @@
 #' packs <- installed.packages()[,1]
 #' packs.filtered <- setdiff(packs,packs['evalCranMeta'] )
 #' cran.meta.dependancies.graph(packs.filtered)
+#' # See: https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-intro.html
 #' @export 
 cran.meta.dependancies.graph <- function (
   cran.packs = as.list(installed.packages()[,1]),
