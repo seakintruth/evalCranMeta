@@ -2,7 +2,7 @@
 #' @return 
 #' A data.frame
 #' @export
-cran.meta.gather.task.views<-function(){
+cran.meta.gather.task.views <- function(){
   cran.available.views <- ctv::available.views()
   # transpose cvt.list type data set to data.frames
   ctv.topics <- NULL
