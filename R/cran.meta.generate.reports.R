@@ -126,9 +126,8 @@ cran.meta.generate.reports <- function(reports.directory=NULL, include.code.revi
     }) %>%
     dplyr::select(DepImp, RDRI)
   
-  c_dat<-cbind(c_dat1,c_dat2)
-  
-  View(c_dat)
+  c_dat<-unique(cbind(c_dat1,c_dat2))
+  c_dat <- dplyr::arrange(c_dat,desc(RDRI))
   #c_filt<-filter(c_dat,)
   
   #------------------------------------------------------------------

@@ -72,16 +72,6 @@ cran.meta.dependancies.graph <- function (
           }
         }
       }  
-      if(dir.exists(result.dir)){
-        break;
-      } else {
-        dir.create(result.dir)
-        if(dir.exists(result.dir)){
-          break;
-        } else {
-          message("Failed to find or create the directory '",result.dir, "' try again")
-        }
-      }
     }
   } else {
     if(is.null(result.dir)){
