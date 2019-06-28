@@ -13,8 +13,7 @@ Imports:
   miniCRAN (>= 0.2.11) ,
   svglite,
   ggplot2,
-  pkgnet,
-  tcltk
+  pkgnet
 Suggests:
   knitr (>= 0.1.0)
 RoxygenNote: 6.1.1

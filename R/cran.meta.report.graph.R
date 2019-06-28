@@ -1,20 +1,21 @@
 #' A wraper on miniCRAN's makeDepGraph to automate generating reports, and visualizations of these graphs
 #' @param cran.packs list containing packages to build dependancies
 #' If a single package is passed then a HTML report is generated and displayed in the browser using pkgnet.
-#' @param generate.visual.graph boolean determines whether or not to generate a visual graph.
-#' @param visual.graph.filepath graph file location, will be ignored if generate.visual.graph is FALSE
 #' @param reports.directory if the reports directory is left NULL and running interactivly then user is prompted for a directory, if NULL and not runnig interactivly uses current working directory 
-#' @section Comments
+#' @section 
+#' Comments
 #' It's really a terrible idea generate a visual graph a graph of all available packages, (not usefull):
 #' but it works, see:
 #' https://www.bsetmet.com/wp-content/bespoke/project_assets/practicum.jeremy.gerdes/all.dependancies.graph.png
 #' @return an igraph of the dependancy graph for supplied package list.
 #' @examples
+#' #Graph installed package, except some package
+#' packs <- installed.packages()[,1]
+#' packs.filtered <- setdiff(packs,packs['evalCranMeta'] )
+#' cran.meta.dependancies.graph(packs.filtered)
 #' @export 
 cran.meta.dependancies.graph <- function (
   cran.packs = as.list(installed.packages()[,1]),
-  generate.visual.graph = TRUE, 
-  visual.graph.filepath = "cran.meta.report.graph.svg",
   reports.directory = NULL
 ){
     if(is.null(reports.directory)){
@@ -33,6 +34,7 @@ cran.meta.dependancies.graph <- function (
       report_path=file.path(reports.directory,paste0(pack.item,".html"))
     )
   }
+  
 #  tryCatch(all.graph <- miniCRAN::makeDepGraph(cran.packs))
   # if (exists("all.graph")){
   #   if(generate.visual.graph == TRUE){
@@ -58,11 +60,11 @@ cran.meta.dependancies.graph <- function (
         result.dir <- readline(prompt = caption)
       }
       if(dir.exists(result.dir)){
-        break
+        break;
       } else {
         dir.create(result.dir)
         if(dir.exists(result.dir)){
-          break
+          break;
         } else {
           message("Failed to find or create the directory '",result.dir, "' try again")
         }
@@ -70,7 +72,7 @@ cran.meta.dependancies.graph <- function (
     }  
   } else {
     if(is.null(result.dir)){
-      reports.directory <- getwd()
+      result.dir <- getwd()
     }   
   }
   return(result.dir)

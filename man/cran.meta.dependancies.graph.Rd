@@ -4,21 +4,24 @@
 \alias{cran.meta.dependancies.graph}
 \title{A wraper on miniCRAN's makeDepGraph to automate generating reports, and visualizations of these graphs}
 \usage{
-
-  cran.meta.dependancies.graph(cran.packs = as.list(installed.packages()[1]),
-  generate.visual.graph = TRUE,
-  visual.graph.filepath = "cran.meta.report.graph.svg")
+cran.meta.dependancies.graph(cran.packs = as.list(installed.packages()[,
+  1]), reports.directory = NULL)
 }
 \arguments{
-\item{cran.packs}{list containing packages to build dependancies}
+\item{cran.packs}{list containing packages to build dependancies
+If a single package is passed then a HTML report is generated and displayed in the browser using pkgnet.}
 
-\item{generate.visual.graph}{boolean determines whether or not to generate a visual graph.}
-
-\item{visual.graph.filepath}{graph file location, will be ignored if generate.visual.graph is FALSE}
+\item{reports.directory}{if the reports directory is left NULL and running interactivly then user is prompted for a directory, if NULL and not runnig interactivly uses current working directory}
 }
 \value{
 an igraph of the dependancy graph for supplied package list.
 }
 \description{
 A wraper on miniCRAN's makeDepGraph to automate generating reports, and visualizations of these graphs
+}
+\examples{
+#Graph installed package, except some package
+packs <- installed.packages()[,1]
+packs.filtered <- setdiff(packs,packs['evalCranMeta'] )
+cran.meta.dependancies.graph(packs.filtered)
 }
