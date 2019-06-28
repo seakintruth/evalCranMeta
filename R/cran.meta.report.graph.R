@@ -35,7 +35,6 @@ cran.meta.dependancies.graph <- function (
       report_path=file.path(reports.directory,paste0(pack.item,".html"))
     )
   }
-  
 #  tryCatch(all.graph <- miniCRAN::makeDepGraph(cran.packs))
   # if (exists("all.graph")){
   #   if(generate.visual.graph == TRUE){
