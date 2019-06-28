@@ -1,23 +1,47 @@
 #' Generates various reports consering the CRAN meta data
 #' @param include.code.review boolean, include code review will install all packages to this machine this can take a long time of first run
 #' @return a data.frame containing CRAN metadata, and code review information
+#' @importFrom magrittr %>%
 #' @export
 cran.meta.generate.reports <- function(include.code.review = FALSE){
   if(include.code.review){
     cran.meta.install.all.packages()
   }  
   #once loaded we don't manipulate the cranData object directly, don't reload...
-  if(!exists("cranData")) cranData<-tools::CRAN_package_db()
+  #if(!exists("cranData")) cranData<-tools::CRAN_package_db()
+  cranData<-tools::CRAN_package_db()
   
   #library(dplyr)
   
   # Fix broken column names (duplicates, and invalid strings)
   names(cranData) <- make.names(names(cranData), unique=TRUE)
   
-  package.license.restricts.use <- cranData %>%
-    filter(License_restricts_use == "yes") # %>%
-  select(Package)
   
+  # ------------------------------------------------------------------------------
+  # [TODO] start recursive function untill all reverse depends, and revers imports
+  #  are found, from starting list
+  # ------------------------------------------------------------------------------
+  RDRI.cols <- c("Package","Reverse.depends","Reverse.imports")
+  
+  pack.restricts.use.RDRI <-  package.license.restricts.use %>% select(RDRI.cols)
+  pack.restricts.use.RDRI <- union(pack.restricts.use.RDRI[,1],pack.restricts.use.RDRI[,2])
+  # remove NA
+  pack.restricts.use.RDRI <- pack.restricts.use.RDRI[!is.na(pack.restricts.use.RDRI)]
+  pack.restricts.use.RDRI <- unlist(strsplit(pack.restricts.use.RDRI, ","))
+  # Remove white space
+  whitespace <- " \t\n\r\v\f"
+  pack.restricts.use.RDRI <- stringr::str_replace_all(pack.restricts.use.RDRI, whitespace, "")
+  pack.restricts.use.RDRI <- as.data.frame(pack.restricts.use.RDRI)
+  names(pack.restricts.use.RDRI) <- "Package"
+  descriptive.cols = c("Package","License","Title",RDRI.cols)
+  
+  pack.restricts.use.RDRI <- inner_join(pack.restricts.use.RDRI,select(cranData,descriptive.cols),by="Package")
+  
+  # ------------------------------------------------------------------------------
+  # End function, currently we get a final answer without going deeper than one iteration.
+  # ------------------------------------------------------------------------------
+  # Here is a list of packages that the enterprise may not
+  # want to use as a general rule.
   # Here is a list of packages that the enterprise may not
   # want to use as a general rule.
   if(exists("xlsx::write.xlsx")){
