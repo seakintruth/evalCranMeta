@@ -1,10 +1,10 @@
-#' A wraper on miniCRAN's makeDepGraph to automate generating reports, and visualizations of these graphs
+#' Creates a .html package report for many packages at once.
 #' @param cran.packs list containing packages to build dependancies
 #' If a single package is passed then a HTML report is generated and displayed in the browser using pkgnet.
 #' @param reports.directory if the reports directory is left NULL and running interactivly then user is prompted for a directory, if NULL and not runnig interactivly uses current working directory 
 #' @section 
 #' Comments
-#' It's really a terrible idea generate a visual graph a graph of all available packages, (not usefull):
+#' It's really a terrible idea to use miniCRAN's makeDepGraph to generate a visual graph a graph of all available packages, (not usefull):
 #' but it works, see:
 #' https://www.bsetmet.com/wp-content/bespoke/project_assets/practicum.jeremy.gerdes/all.dependancies.graph.png
 #' @return an igraph of the dependancy graph for supplied package list.

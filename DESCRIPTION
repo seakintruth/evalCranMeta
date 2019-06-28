@@ -1,6 +1,6 @@
 Package: evalCranMeta 
 Title: Evaluate CRAN Meta Data
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: 
   person("Gerdes", "Jeremy", email ="seakintruth@gmail.com", 
   role = c("aut", "cre"))
