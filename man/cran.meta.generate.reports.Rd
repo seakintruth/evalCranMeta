@@ -4,7 +4,7 @@
 \alias{cran.meta.generate.reports}
 \title{Generates various reports consering the CRAN meta data}
 \usage{
-cran.meta.generate.reports(reports.directory,
+cran.meta.generate.reports(reports.directory = NULL,
   include.code.review = FALSE)
 }
 \arguments{

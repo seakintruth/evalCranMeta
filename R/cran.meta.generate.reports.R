@@ -3,10 +3,18 @@
 #' @return a data.frame containing CRAN metadata, and code review information
 #' @importFrom magrittr "%>%"
 #' @export
-cran.meta.generate.reports <- function(reports.directory, include.code.review = FALSE){
+cran.meta.generate.reports <- function(reports.directory=NULL, include.code.review = FALSE){
   if(include.code.review){
     cran.meta.install.all.packages()
   }  
+  if(is.null(reports.directory)){
+    reports.directory <- .choose_directory()
+  } else  {
+    if (!dir.exists(reports.directory)){
+      reports.directory <- .choose_directory()
+    } 
+  }
+  
   #once loaded we don't manipulate the cranData object directly, don't reload...
   #if(!exists("cranData")) cranData<-tools::CRAN_package_db()
   cranData<-tools::CRAN_package_db()

@@ -50,6 +50,7 @@ cran.meta.dependancies.graph <- function (
   #   return(NULL)
   # }
 }
+#' @export 
 .choose_directory = function(caption = 'Select data directory: ') {
   if(interactive()){
     # will prompt for a 
