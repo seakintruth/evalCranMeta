@@ -14,7 +14,6 @@ cran.meta.generate.reports <- function(reports.directory=NULL, include.code.revi
       reports.directory <- .choose_directory()
     } 
   }
-  
   #once loaded we don't manipulate the cranData object directly, don't reload...
   #if(!exists("cranData")) cranData<-tools::CRAN_package_db()
   cranData<-tools::CRAN_package_db()
@@ -53,18 +52,32 @@ cran.meta.generate.reports <- function(reports.directory=NULL, include.code.revi
   # want to use as a general rule.
   # check if xlsx is installed prior to exporting report
   if(exists("xlsx::write.xlsx")){
+    report.filepath <- file.path(reports.directory,"package.license.restricts.use.xlsx") 
     write.xlsx(
       pack.restricts.use.RDRI,
-      file=filepath(reports.directory,"package.license.restricts.use.xlsx"),
+      file=report.filepath,
       sheetName="license_restricts_use",
       row.names=FALSE
     )  
   }else{
+    report.filepath <- file.path(reports.directory,"package.license.restricts.use.csv") 
     write.csv(pack.restricts.use.RDRI,
-      file=filepath(reports.directory,"package.license.restricts.use.csv"),
+      file=report.filepath,
       row.names=FALSE
     )
   }
+  if(.Platform$OS.type == "unix") {
+   # if libre office is installed open with that!
+    system("which soffice>/tmp/libreoffice.txt")
+    libre.office.install <- read.fwf("/tmp/libreoffice.txt",10000)
+    libre.office.install<-as.character(libre.office.install[1,1])
+    if(dir.exists(libre.office.install)){
+      system(paste0("screen ",libre.office.install," -o ",report.filepath))
+    }
+  } else {
+    shell(report.filepath)
+  }
+  
   #https://rviews.rstudio.com/2018/03/08/cran-package-metadata
   pdb <- cranData
   meta_data <- pdb[,c(1,4,5,17,60,61)]
@@ -76,9 +89,9 @@ cran.meta.generate.reports <- function(reports.directory=NULL, include.code.revi
   names(meta_data) <- c("Package", "Dep", "Imp", "Aut", "RD", "RI")
   
   fcn<-function(x,y){
-    x<-unlist(x) %>% strsplit(",")
-    y<-unlist(y) %>% strsplit(",")
-    z<-unlist(na.omit(union(x,y)))
+    x <- strsplit(unlist(x),",")
+    y <- strsplit(unlist(y) ,",")
+    z <- unlist(na.omit(union(x,y)))
   }
   
   #library(dplyr)
@@ -91,17 +104,17 @@ cran.meta.generate.reports <- function(reports.directory=NULL, include.code.revi
   clean2<-function(x){
     gsub("[\r\n]","",x)
   }
-  #library(purrr)
-  meta_data$Aut<-meta_data$Aut %>% purrr::map(clean) %>% purrr::map(clean2)
+  #library(purrr) 
+  meta_data$Aut <- purrr::map(purrr::map(meta_data$Aut,clean),clean2)
   rm_na<-function(x){
     list(na.omit(unlist(x)))
   }
-  
+  #library(dplyr) #%>% pipes aren't loading like they should, may need to re-write without them.
   c_dat1<-seq_len(nrow(meta_data)) %>%
     purrr::map_df(~{
       meta_data[.x, ] %>%
         select(-Package, -DepImp, -RDRI) %>%
-        purrr::map_df(~ifelse(is.na(.x), 0, length(str_split(.x, ",")[[1]]))) %>%
+        purrr::map_df(~ifelse(is.na(.x), 0, length(stringr::str_split(.x, ",")[[1]]))) %>%
         dplyr::mutate(Package=meta_data$Package[.x])
     }) %>%
     dplyr::select(Package, Aut, Dep, Imp, RD, RI)
@@ -115,7 +128,7 @@ cran.meta.generate.reports <- function(reports.directory=NULL, include.code.revi
   
   c_dat<-cbind(c_dat1,c_dat2)
   
-  #View(c_dat)
+  View(c_dat)
   #c_filt<-filter(c_dat,)
   
   #------------------------------------------------------------------

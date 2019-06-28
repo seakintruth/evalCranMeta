@@ -53,13 +53,25 @@ cran.meta.dependancies.graph <- function (
 #' @export 
 .choose_directory = function(caption = 'Select data directory: ') {
   if(interactive()){
-    # will prompt for a 
     repeat{
-      if (exists('utils::choose.dir')) {
-        result.dir <- choose.dir(caption = caption) 
-      } else {
-        result.dir <- readline(prompt = caption)
-      }
+      # will prompt for a 
+      repeat{
+        if (exists('utils::choose.dir')) {
+          result.dir <- choose.dir(caption = caption) 
+        } else {
+          result.dir <- readline(prompt = caption)
+        }
+        if(dir.exists(result.dir)){
+          break;
+        } else {
+          dir.create(result.dir)
+          if(dir.exists(result.dir)){
+            break;
+          } else {
+            message("Failed to find or create the directory '",result.dir, "' try again")
+          }
+        }
+      }  
       if(dir.exists(result.dir)){
         break;
       } else {
@@ -70,10 +82,10 @@ cran.meta.dependancies.graph <- function (
           message("Failed to find or create the directory '",result.dir, "' try again")
         }
       }
-    }  
+    }
   } else {
     if(is.null(result.dir)){
-      result.dir <- getwd()
+      result.dir <- file.path(getwd(),".Rproj.user")
     }   
   }
   return(result.dir)
