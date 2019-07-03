@@ -1,6 +1,5 @@
 logMessage <- function(strMessage, strLogFileName, fCreateNewFile = FALSE){
   #log our actions
-  message(strLogFileName);
   if(fCreateNewFile){
     file.remove(strLogFileName);
   }
@@ -27,7 +26,8 @@ cran.meta.gather.file.data <- function(reports.directory=Sys.getenv("R_LIBS_USER
     } 
   }
   strBasePath <- reports.directory
-  log.file <- "fileSearch.log"
+  dir.create(".Ruserdata",showWarnings = FALSE)
+  log.file <- file.path(getwd(),".Ruserdata","fileSearch.log")
   
   timer.start <-Sys.time();
   search.Recursive <- TRUE
@@ -54,7 +54,7 @@ cran.meta.gather.file.data <- function(reports.directory=Sys.getenv("R_LIBS_USER
   );
   logMessage(strMessage ,log.file);
   timer.start.next <- Sys.time()
-  file.list <- "installed.packages.thisMachineFileList.Rdata"
+  file.list <- file.path(getwd(),".Ruserdata","installed.packages.thisMachineFileList.Rdata")
   save(thisMachineFileList,file=file.list);
   strMessage <- paste0(
     "Completed save of file.list after ",
