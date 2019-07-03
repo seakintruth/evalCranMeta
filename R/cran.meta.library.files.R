@@ -1,6 +1,5 @@
 logMessage <- function(strMessage, strLogFileName, fCreateNewFile = FALSE){
   #log our actions
-  message(strLogFileName);
   if(fCreateNewFile){
     file.remove(strLogFileName);
   }
@@ -16,7 +15,7 @@ logMessage <- function(strMessage, strLogFileName, fCreateNewFile = FALSE){
 };
 
 #' @export
-cran.meta.gather.file.data <- function(reports.directory=Sys.getEnv("R_LIBS_USER")){
+cran.meta.gather.file.data <- function(reports.directory=Sys.getenv("R_LIBS_USER")){
   #strBasePath <- (.choose_directory(caption="Select installed folder directory"))
   # [TODO] make this work for windows and linux
   if(stringr::str_length(reports.directory)==0){
